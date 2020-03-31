@@ -1,11 +1,12 @@
-import { handleNotification } from "./notifications";
+import { handleNewUser, handleUserLeft } from "./notifications";
 
 let socket = null;
 
 export function initiateSocket() {
   if (socket === null) {
     socket = io("/");
-    socket.on(window.events.newUser, handleNotification);
+    socket.on(window.events.newUser, handleNewUser);
+    socket.on(window.events.userLeft, handleUserLeft);
   }
 }
 

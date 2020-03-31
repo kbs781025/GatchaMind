@@ -1,6 +1,7 @@
 const Events = {
   loggedIn: "loggedin",
-  newUser: "newuser"
+  newUser: "newuser",
+  userLeft: "userleft"
 };
 
 export default Events;
