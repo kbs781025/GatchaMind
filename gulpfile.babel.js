@@ -42,7 +42,7 @@ function js() {
 }
 
 function watchFiles() {
-  gulp.watch(paths.js.src, js);
+  gulp.watch(paths.js.watch, js);
   gulp.watch(paths.styles.watch, styles);
 }
 

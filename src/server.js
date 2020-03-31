@@ -3,6 +3,7 @@ import path from "path";
 import socketio from "socket.io";
 import http from "http";
 import morgan from "morgan";
+import { controlSocket } from "./socketController";
 
 const app = express();
 const PORT = 4000;
@@ -19,7 +20,5 @@ const io = socketio.listen(server);
 server.listen(PORT, () => console.log(`Listening on port ${PORT}`));
 
 io.on("connection", socket => {
-  socket.broadcast.emit("Hello");
-  socket.on("Bye", () => console.log("Someone said bye."));
+  controlSocket(socket);
 });
-
