@@ -1,3 +1,19 @@
 body {
   background-color: ivory;
+  .login_box {
+    display: none;
+  }
+  .game_box {
+    display: none;
+  }
+  &.logged_in {
+    .game_box {
+      display: inline;
+    }
+  }
+  &.logged_out {
+    .login_box {
+      display: inline;
+    }
+  }
 }
