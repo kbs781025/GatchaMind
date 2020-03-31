@@ -1,3 +1,5 @@
+import { emitSendMessage } from "./sockets";
+
 const chatForm = document.getElementById("jsSendMessage");
 const messageList = document.getElementById("jsMessages");
 
@@ -14,8 +16,13 @@ function appendMessage(message, nickname) {
 function handleMessageSubmit(event) {
   event.preventDefault();
   const input = event.target.querySelector("input");
+  emitSendMessage(input.value);
   appendMessage(input.value);
   input.value = "";
+}
+
+export function handleNewMessage({ message, nickname }) {
+  appendMessage(message, nickname);
 }
 
 if (chatForm) {
