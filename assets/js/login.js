@@ -6,6 +6,11 @@ const LOGGED_OUT = "logged_out";
 
 const nickName = localStorage.getItem(USER_NICKNAME);
 
+function logIn(nickname) {
+  window.socket = io("/");
+  socket.emit(window.events.LoggedIn, nickName);
+}
+
 function handleFormSubmit(event) {
   event.preventDefault();
   const input = event.target.querySelector("input");
@@ -15,13 +20,13 @@ function handleFormSubmit(event) {
     input.value = "";
     body.className = LOGGED_IN;
 
-    const socket = io("/");
-    socket.emit("loggedin", nickName);
+    logIn(nickName);
   }
 }
 
 if (nickName) {
   body.className = LOGGED_IN;
+  logIn(nickName);
 } else {
   body.className = LOGGED_OUT;
 }
