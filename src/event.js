@@ -9,7 +9,8 @@ const Events = {
   setColor: "setcolor",
   setWidth: "setwidth",
   fillCanvas: "fillcanvas",
-  userUpdate: "userupdate"
+  userUpdate: "userupdate",
+  gameStart: "gamestart"
 };
 
 export default Events;

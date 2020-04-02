@@ -1,12 +1,17 @@
 import Events from "./event";
+import { chooseWord } from "./words";
 
 let userSockets = [];
 
-function notifyUserUpdate(io) {
-  io.emit(Events.userUpdate, userSockets);
+function selectRandomPainter() {
+  return userSockets[Math.floor(Math.random() * userSockets.length)];
 }
 
 export function controlSocket(io, socket) {
+  function notifyUserUpdate() {
+    io.emit(Events.userUpdate, userSockets);
+  }
+
   socket.on(Events.loggedIn, function(nickname) {
     socket.nickname = nickname;
     userSockets.push({
@@ -44,6 +49,12 @@ export function controlSocket(io, socket) {
 
   socket.on(Events.fillCanvas, function() {
     socket.broadcast.emit(Events.fillCanvas);
+  });
+
+  socket.on(Events.gameStart, function() {
+    const painter = selectRandomPainter();
+    const word = chooseWord;
+    io.emit(Events.gameStart, { painter, word });
   });
 
   socket.on("disconnect", function() {
