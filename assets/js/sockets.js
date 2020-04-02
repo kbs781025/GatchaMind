@@ -7,6 +7,7 @@ import {
   handleSetWidth,
   handleFillCanvas
 } from "./paint";
+import { handleUserUpdate } from "./players";
 
 let socket = null;
 
@@ -25,6 +26,7 @@ export function initiateSocket() {
     socket.on(window.events.setColor, handleSetColor);
     socket.on(window.events.setWidth, handleSetWidth);
     socket.on(window.events.fillCanvas, handleFillCanvas);
+    socket.on(window.events.userUpdate, handleUserUpdate);
   }
 }
 
