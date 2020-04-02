@@ -68,6 +68,7 @@ function initCanvas() {
   canvas.addEventListener("mousedown", startPainting);
   canvas.addEventListener("mouseup", stopPainting);
   canvas.addEventListener("mouseleave", stopPainting);
+  canvas.addEventListener("click", onCanvasClick);
 
   context.fillStyle = "white";
   context.fillRect(0, 0, canvas.width, canvas.height);
@@ -82,9 +83,7 @@ function onMouseMove(event) {
     context.stroke();
     getSocket().emit(window.events.stroking, {
       x,
-      y,
-      color: currentColor,
-      width: currentLineWidth
+      y
     });
   } else {
     context.beginPath(x, y);
@@ -96,15 +95,18 @@ function onMouseMove(event) {
   }
 }
 
-function startPainting() {
-  context.strokeStyle = currentColor;
-  context.lineWidth = currentLineWidth;
-
+function onCanvasClick() {
   if (fillMode) {
     context.fillStyle = currentColor;
     context.fillRect(0, 0, canvas.width, canvas.height);
     getSocket().emit(window.events.fillCanvas);
   }
+}
+
+function startPainting() {
+  context.strokeStyle = currentColor;
+  context.lineWidth = currentLineWidth;
+
   painting = true;
 }
 
@@ -124,6 +126,7 @@ export function handleMouseMoving({ x, y }) {
 
 export function handleSetColor({ color }) {
   context.strokeStyle = color;
+  context.fillStyle = color;
 }
 
 export function handleSetWidth({ width }) {
@@ -131,7 +134,6 @@ export function handleSetWidth({ width }) {
 }
 
 export function handleFillCanvas() {
-  context.fillStyle = context.strokeStyle;
   context.fillRect(0, 0, canvas.width, canvas.height);
 }
 
