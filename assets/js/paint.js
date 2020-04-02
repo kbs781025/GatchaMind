@@ -44,6 +44,9 @@ function initColorButtons() {
   buttonArray.forEach(color =>
     color.addEventListener("click", function() {
       currentColor = this.style.backgroundColor;
+      getSocket().emit(window.events.setColor, {
+        color: currentColor
+      });
     })
   );
 }
@@ -54,6 +57,9 @@ function initRangeBar() {
     .getElementsByTagName("input")[0];
   rangeBar.addEventListener("input", function() {
     currentLineWidth = this.value;
+    getSocket().emit(window.events.setColor, {
+      width: currentLineWidth
+    });
   });
 }
 
@@ -85,9 +91,7 @@ function onMouseMove(event) {
     context.moveTo(x, y);
     getSocket().emit(window.events.mouseMoving, {
       x,
-      y,
-      color: currentColor,
-      width: currentLineWidth
+      y
     });
   }
 }
@@ -99,6 +103,7 @@ function startPainting() {
   if (fillMode) {
     context.fillStyle = currentColor;
     context.fillRect(0, 0, canvas.width, canvas.height);
+    getSocket().emit(window.events.fillCanvas);
   }
   painting = true;
 }
@@ -107,23 +112,27 @@ function stopPainting() {
   painting = false;
 }
 
-function setDrawStyle(color, width) {
-  currentColor = color;
-  currentLineWidth = width;
-  context.strokeStyle = currentColor;
-  context.lineWidth = currentLineWidth;
-}
-
-export function handleStroking({ x, y, color, width }) {
-  setDrawStyle(color, width);
+export function handleStroking({ x, y }) {
   context.lineTo(x, y);
   context.stroke();
 }
 
-export function handleMouseMoving({ x, y, color, width }) {
-  setDrawStyle(color, width);
+export function handleMouseMoving({ x, y }) {
   context.beginPath(x, y);
   context.moveTo(x, y);
+}
+
+export function handleSetColor({ color }) {
+  context.strokeStyle = color;
+}
+
+export function handleSetWidth({ width }) {
+  context.lineWidth = width;
+}
+
+export function handleFillCanvas() {
+  context.fillStyle = context.strokeStyle;
+  context.fillRect(0, 0, canvas.width, canvas.height);
 }
 
 if (canvas) {
