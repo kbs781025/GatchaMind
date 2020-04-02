@@ -23,7 +23,7 @@ export function initiateSocket() {
     socket.on(window.events.mouseMoving, handleMouseMoving);
     socket.on(window.events.stroking, handleStroking);
     socket.on(window.events.setColor, handleSetColor);
-    socket.on(window.events.setColor, handleSetWidth);
+    socket.on(window.events.setWidth, handleSetWidth);
     socket.on(window.events.fillCanvas, handleFillCanvas);
   }
 }

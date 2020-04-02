@@ -24,12 +24,12 @@ export function controlSocket(socket) {
     socket.broadcast.emit(Events.stroking, { x, y });
   });
 
-  socket.on(Events.setColor, function({ color }) {
-    socket.broadcast.emit(Events.setColor, { color });
+  socket.on(Events.setColor, function(color) {
+    socket.broadcast.emit(Events.setColor, color);
   });
 
-  socket.on(Events.setWidth, function({ width }) {
-    socket.broadcast.emit(Events.setWidth, { width });
+  socket.on(Events.setWidth, function(width) {
+    socket.broadcast.emit(Events.setWidth, width);
   });
 
   socket.on(Events.fillCanvas, function() {

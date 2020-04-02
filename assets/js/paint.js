@@ -5,6 +5,7 @@ const context = canvas.getContext("2d");
 
 let currentColor = "rgba(0, 0, 0, 0)";
 let currentLineWidth = "2.5";
+
 let fillMode = false;
 
 canvas.width = 500;
@@ -44,9 +45,7 @@ function initColorButtons() {
   buttonArray.forEach(color =>
     color.addEventListener("click", function() {
       currentColor = this.style.backgroundColor;
-      getSocket().emit(window.events.setColor, {
-        color: currentColor
-      });
+      getSocket().emit(window.events.setColor, currentColor);
     })
   );
 }
@@ -57,9 +56,7 @@ function initRangeBar() {
     .getElementsByTagName("input")[0];
   rangeBar.addEventListener("input", function() {
     currentLineWidth = this.value;
-    getSocket().emit(window.events.setColor, {
-      width: currentLineWidth
-    });
+    getSocket().emit(window.events.setWidth, currentLineWidth);
   });
 }
 
@@ -70,6 +67,8 @@ function initCanvas() {
   canvas.addEventListener("mouseleave", stopPainting);
   canvas.addEventListener("click", onCanvasClick);
 
+  context.strokeStyle = currentColor;
+  context.lineWidth = currentLineWidth;
   context.fillStyle = "white";
   context.fillRect(0, 0, canvas.width, canvas.height);
 }
@@ -124,12 +123,12 @@ export function handleMouseMoving({ x, y }) {
   context.moveTo(x, y);
 }
 
-export function handleSetColor({ color }) {
+export function handleSetColor(color) {
   context.strokeStyle = color;
   context.fillStyle = color;
 }
 
-export function handleSetWidth({ width }) {
+export function handleSetWidth(width) {
   context.lineWidth = width;
 }
 
