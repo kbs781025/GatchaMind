@@ -8,10 +8,10 @@ function notifyUserUpdate(io) {
 
 export function controlSocket(io, socket) {
   socket.on(Events.loggedIn, function(nickname) {
-    socket.nickName = nickname;
+    socket.nickname = nickname;
     userSockets.push({
       id: socket.id,
-      nickName: socket.nickName,
+      nickname: socket.nickname,
       score: 0
     });
     notifyUserUpdate(io);
