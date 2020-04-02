@@ -1,3 +1,5 @@
+import { getSocket } from "./sockets";
+
 const canvas = document.getElementById("jsCanvas");
 const context = canvas.getContext("2d");
 
@@ -72,9 +74,21 @@ function onMouseMove(event) {
   if (painting) {
     context.lineTo(x, y);
     context.stroke();
+    getSocket().emit(window.events.stroking, {
+      x,
+      y,
+      color: currentColor,
+      width: currentLineWidth
+    });
   } else {
     context.beginPath(x, y);
     context.moveTo(x, y);
+    getSocket().emit(window.events.mouseMoving, {
+      x,
+      y,
+      color: currentColor,
+      width: currentLineWidth
+    });
   }
 }
 
@@ -91,6 +105,25 @@ function startPainting() {
 
 function stopPainting() {
   painting = false;
+}
+
+function setDrawStyle(color, width) {
+  currentColor = color;
+  currentLineWidth = width;
+  context.strokeStyle = currentColor;
+  context.lineWidth = currentLineWidth;
+}
+
+export function handleStroking({ x, y, color, width }) {
+  setDrawStyle(color, width);
+  context.lineTo(x, y);
+  context.stroke();
+}
+
+export function handleMouseMoving({ x, y, color, width }) {
+  setDrawStyle(color, width);
+  context.beginPath(x, y);
+  context.moveTo(x, y);
 }
 
 if (canvas) {

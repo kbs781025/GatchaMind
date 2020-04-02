@@ -1,5 +1,6 @@
 import { handleNewUser, handleUserLeft } from "./notifications";
 import { handleNewMessage } from "./chat";
+import { handleStroking, handleMouseMoving } from "./paint";
 
 let socket = null;
 
@@ -13,6 +14,8 @@ export function initiateSocket() {
     socket.on(window.events.newUser, handleNewUser);
     socket.on(window.events.userLeft, handleUserLeft);
     socket.on(window.events.newMessage, handleNewMessage);
+    socket.on(window.events.mouseMoving, handleMouseMoving);
+    socket.on(window.events.stroking, handleStroking);
   }
 }
 
