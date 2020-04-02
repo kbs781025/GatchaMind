@@ -17,3 +17,54 @@ body {
     }
   }
 }
+
+.canvas {
+  width: 500px;
+  height: 700px;
+  margin: auto;
+  display: block;
+  background-color: white;
+  border-radius: 15px;
+}
+
+.controls {
+  margin-top: 40px;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.controls__colors .control__color {
+  width: 50px;
+  height: 50px;
+  border-radius: 25px;
+  cursor: pointer;
+  display: inline-block;
+}
+
+.controls .control__range {
+  margin-bottom: 30px;
+}
+
+.controls .controls__btns {
+  margin-bottom: 30px;
+}
+
+.controls__btns button {
+  all: unset;
+  cursor: pointer;
+  background-color: white;
+  padding: 5px 0px;
+  width: 80px;
+  text-align: center;
+  border-radius: 5px;
+  border: 2px solid rgba(0, 0, 0, 0.2);
+  color: rgba(0, 0, 0, 0.7);
+  text-transform: uppercase;
+  font-weight: 800;
+  font-size: 12px;
+}
+
+.controls__btns button:active {
+  transform: scale(0.98);
+}

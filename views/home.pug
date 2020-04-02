@@ -10,6 +10,23 @@ html(lang="en")
             form#jsLoginForm
                 input(placeholder="Enter your nickname" type="text")
         .game_box
+            .paintingBoard
+                canvas.canvas#jsCanvas
+                .controls
+                    .control__range#jsRange
+                        input(type="range" min="0.1" max="5.0" value="2.5" step="0.1")
+                    .controls__btns
+                        button#jsMode Fill
+                    .controls__colors#jsColors
+                        .control__color(style="background-color: #000000FF")
+                        .control__color(style="background-color: #FF0000FF")
+                        .control__color(style="background-color: #FFA500FF")
+                        .control__color(style="background-color: #FFFF00FF")
+                        .control__color(style="background-color: #008000FF")
+                        .control__color(style="background-color: #40E0D0FF")
+                        .control__color(style="background-color: #00008BFF")
+                        .control__color(style="background-color: #FF00FFFF")
+                        .control__color(style="background-color: #DB7093FF")
             .chat
                 ul.chat__messages#jsMessages
                 form.chat__form#jsSendMessage
