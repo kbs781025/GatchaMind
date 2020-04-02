@@ -16,6 +16,14 @@ export function controlSocket(socket) {
     });
   });
 
+  socket.on(Events.mouseMoving, function({ x, y, color, width }) {
+    socket.broadcast.emit(Events.mouseMoving, { x, y, color, width });
+  });
+
+  socket.on(Events.stroking, function({ x, y, color, width }) {
+    socket.broadcast.emit(Events.stroking, { x, y, color, width });
+  });
+
   socket.on("disconnect", function() {
     socket.broadcast.emit(Events.userLeft, socket.nickname);
   });

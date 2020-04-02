@@ -3,7 +3,9 @@ const Events = {
   newUser: "newuser",
   userLeft: "userleft",
   sendMessage: "sendmessage",
-  newMessage: "newmessgae"
+  newMessage: "newmessgae",
+  mouseMoving: "mousemoving",
+  stroking: "stroking"
 };
 
 export default Events;
