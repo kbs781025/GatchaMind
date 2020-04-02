@@ -23,5 +23,5 @@ const io = socketio.listen(server);
 server.listen(PORT, () => console.log(`Listening on port ${PORT}`));
 
 io.on("connection", socket => {
-  controlSocket(socket);
+  controlSocket(io, socket);
 });

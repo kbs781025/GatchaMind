@@ -1,15 +1,25 @@
 import Events from "./event";
 
-export function controlSocket(socket) {
+let userSockets = [];
+
+function notifyUserUpdate(io) {
+  io.emit(Events.userUpdate, userSockets);
+}
+
+export function controlSocket(io, socket) {
   socket.on(Events.loggedIn, function(nickname) {
-    console.log(nickname);
-    socket.nickname = nickname;
+    socket.nickName = nickname;
+    userSockets.push({
+      id: socket.id,
+      nickName: socket.nickName,
+      score: 0
+    });
+    notifyUserUpdate(io);
     socket.broadcast.emit(Events.newUser, nickname);
   });
 
   socket.on(Events.sendMessage, function(message) {
     console.log("New message received.");
-    console.log(socket.nickname);
     socket.broadcast.emit(Events.newMessage, {
       message,
       nickname: socket.nickname
@@ -38,5 +48,7 @@ export function controlSocket(socket) {
 
   socket.on("disconnect", function() {
     socket.broadcast.emit(Events.userLeft, socket.nickname);
+    userSockets = userSockets.filter(userSocket => userSocket.id !== socket.id);
+    notifyUserUpdate(io);
   });
 }

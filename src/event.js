@@ -8,7 +8,8 @@ const Events = {
   stroking: "stroking",
   setColor: "setcolor",
   setWidth: "setwidth",
-  fillCanvas: "fillcanvas"
+  fillCanvas: "fillcanvas",
+  userUpdate: "userupdate"
 };
 
 export default Events;
