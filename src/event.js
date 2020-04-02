@@ -5,7 +5,10 @@ const Events = {
   sendMessage: "sendmessage",
   newMessage: "newmessgae",
   mouseMoving: "mousemoving",
-  stroking: "stroking"
+  stroking: "stroking",
+  setColor: "setcolor",
+  setWidth: "setwidth",
+  fillCanvas: "fillcanvas"
 };
 
 export default Events;
