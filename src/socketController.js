@@ -2,6 +2,7 @@ import Events from "./event";
 import { chooseWord } from "./words";
 
 let userSockets = [];
+let quizWord = null;
 
 function selectRandomPainter() {
   return userSockets[Math.floor(Math.random() * userSockets.length)];
@@ -21,6 +22,12 @@ export function controlSocket(io, socket) {
     });
     notifyUserUpdate(io);
     socket.broadcast.emit(Events.newUser, nickname);
+
+    if (userSockets.length >= 2) {
+      const painter = selectRandomPainter();
+      quizWord = chooseWord();
+      io.emit(Events.gameStart, painter);
+    }
   });
 
   socket.on(Events.sendMessage, function(message) {

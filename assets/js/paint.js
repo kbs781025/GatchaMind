@@ -36,18 +36,7 @@ function initFillButton() {
 }
 
 function initColorButtons() {
-  const colorButtons = document
-    .getElementById("jsColors")
-    .getElementsByTagName("div");
-
-  const buttonArray = Array.from(colorButtons);
-
-  buttonArray.forEach(color =>
-    color.addEventListener("click", function() {
-      currentColor = this.style.backgroundColor;
-      getSocket().emit(window.events.setColor, currentColor);
-    })
-  );
+  enableColorButtons();
 }
 
 function initRangeBar() {
@@ -61,16 +50,9 @@ function initRangeBar() {
 }
 
 function initCanvas() {
-  canvas.addEventListener("mousemove", onMouseMove);
-  canvas.addEventListener("mousedown", startPainting);
-  canvas.addEventListener("mouseup", stopPainting);
-  canvas.addEventListener("mouseleave", stopPainting);
-  canvas.addEventListener("click", onCanvasClick);
-
+  enableCanvas();
   context.strokeStyle = currentColor;
   context.lineWidth = currentLineWidth;
-  context.fillStyle = "white";
-  context.fillRect(0, 0, canvas.width, canvas.height);
 }
 
 function onMouseMove(event) {
@@ -113,6 +95,60 @@ function stopPainting() {
   painting = false;
 }
 
+function disableCanvas() {
+  canvas.removeEventListener("mousemove", onMouseMove);
+  canvas.removeEventListener("mousedown", startPainting);
+  canvas.removeEventListener("mouseup", stopPainting);
+  canvas.removeEventListener("mouseleave", stopPainting);
+  canvas.removeEventListener("click", onCanvasClick);
+
+  context.fillStyle = "white";
+  context.fillRect(0, 0, canvas.width, canvas.height);
+}
+
+function enableCanvas() {
+  canvas.addEventListener("mousemove", onMouseMove);
+  canvas.addEventListener("mousedown", startPainting);
+  canvas.addEventListener("mouseup", stopPainting);
+  canvas.addEventListener("mouseleave", stopPainting);
+  canvas.addEventListener("click", onCanvasClick);
+
+  context.fillStyle = "white";
+  context.fillRect(0, 0, canvas.width, canvas.height);
+}
+
+function disableColorButtons() {
+  const colorButtons = document
+    .getElementById("jsColors")
+    .getElementsByTagName("div");
+
+  const buttonArray = Array.from(colorButtons);
+
+  buttonArray.forEach(color => {
+    color.style.display = "none";
+    color.addEventListener("click", function() {
+      currentColor = this.style.backgroundColor;
+      getSocket().emit(window.events.setColor, currentColor);
+    });
+  });
+}
+
+function enableColorButtons() {
+  const colorButtons = document
+    .getElementById("jsColors")
+    .getElementsByTagName("div");
+
+  const buttonArray = Array.from(colorButtons);
+
+  buttonArray.forEach(color => {
+    color.style.display = "inline-block";
+    color.addEventListener("click", function() {
+      currentColor = this.style.backgroundColor;
+      getSocket().emit(window.events.setColor, currentColor);
+    });
+  });
+}
+
 export function handleStroking({ x, y }) {
   context.lineTo(x, y);
   context.stroke();
@@ -134,6 +170,16 @@ export function handleSetWidth(width) {
 
 export function handleFillCanvas() {
   context.fillRect(0, 0, canvas.width, canvas.height);
+}
+
+export function handleGameStart(painter) {
+  if (painter.id !== getSocket().id) {
+    disableCanvas();
+    disableColorButtons();
+  } else {
+    enableCanvas();
+    enableColorButtons();
+  }
 }
 
 if (canvas) {

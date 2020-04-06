@@ -5,7 +5,8 @@ import {
   handleMouseMoving,
   handleSetColor,
   handleSetWidth,
-  handleFillCanvas
+  handleFillCanvas,
+  handleGameStart
 } from "./paint";
 import { handleUserUpdate } from "./players";
 
@@ -27,6 +28,7 @@ export function initiateSocket() {
     socket.on(window.events.setWidth, handleSetWidth);
     socket.on(window.events.fillCanvas, handleFillCanvas);
     socket.on(window.events.userUpdate, handleUserUpdate);
+    socket.on(window.events.gameStart, handleGameStart);
   }
 }
 
