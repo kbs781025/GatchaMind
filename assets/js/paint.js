@@ -1,5 +1,5 @@
 import { getSocket } from "./sockets";
-import { appendMessage } from "./chat";
+import { appendMessage, enableChatting, disableChatting } from "./chat";
 
 const canvas = document.getElementById("jsCanvas");
 const context = canvas.getContext("2d");
@@ -177,9 +177,11 @@ export function handleGameStart(painter) {
   if (painter.id !== getSocket().id) {
     disableCanvas();
     disableColorButtons();
+    enableChatting();
   } else {
     enableCanvas();
     enableColorButtons();
+    disableChatting();
   }
 }
 

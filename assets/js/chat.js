@@ -25,6 +25,14 @@ export function handleNewMessage({ message, nickname }) {
   appendMessage(message, nickname);
 }
 
+export function disableChatting() {
+  chatForm.style.display = "none";
+}
+
+export function enableChatting() {
+  chatForm.style.display = "inline-block";
+}
+
 if (chatForm) {
   chatForm.addEventListener("submit", handleMessageSubmit);
 }
