@@ -38,7 +38,6 @@ export function controlSocket(io, socket) {
     if (userSockets.length >= 2) {
       const painter = selectRandomPainter();
       quizWord = chooseWord();
-      quizWord = "apple";
       io.emit(Events.gameStart, painter);
       setTimeout(emitGameEnd, 50000);
     }
