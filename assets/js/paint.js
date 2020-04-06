@@ -1,4 +1,5 @@
 import { getSocket } from "./sockets";
+import { appendMessage } from "./chat";
 
 const canvas = document.getElementById("jsCanvas");
 const context = canvas.getContext("2d");
@@ -180,6 +181,12 @@ export function handleGameStart(painter) {
     enableCanvas();
     enableColorButtons();
   }
+}
+
+export function handleGameEnd(quizWord) {
+  enableCanvas();
+  enableColorButtons();
+  appendMessage(`The answer was : ${quizWord}`, "Bot");
 }
 
 if (canvas) {

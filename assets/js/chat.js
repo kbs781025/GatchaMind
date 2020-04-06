@@ -3,7 +3,7 @@ import { emitSendMessage } from "./sockets";
 const chatForm = document.getElementById("jsSendMessage");
 const messageList = document.getElementById("jsMessages");
 
-function appendMessage(message, nickname) {
+export function appendMessage(message, nickname) {
   const li = document.createElement("li");
   li.innerHTML = `
     <span class="message ${nickname ? "others" : "me"}"> ${

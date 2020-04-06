@@ -6,9 +6,10 @@ import {
   handleSetColor,
   handleSetWidth,
   handleFillCanvas,
-  handleGameStart
+  handleGameStart,
+  handleGameEnd
 } from "./paint";
-import { handleUserUpdate } from "./players";
+import { handleUserUpdate, handleUserWin } from "./players";
 
 let socket = null;
 
@@ -29,6 +30,8 @@ export function initiateSocket() {
     socket.on(window.events.fillCanvas, handleFillCanvas);
     socket.on(window.events.userUpdate, handleUserUpdate);
     socket.on(window.events.gameStart, handleGameStart);
+    socket.on(window.events.gameEnd, handleGameEnd);
+    socket.on(window.events.userWin, handleUserWin);
   }
 }
 

@@ -1,3 +1,5 @@
+import { appendMessage } from "./chat";
+
 const userBoard = document.getElementById("jsUserBoard");
 
 export function handleUserUpdate(userSockets) {
@@ -7,4 +9,9 @@ export function handleUserUpdate(userSockets) {
     span.innerText = `${element.nickname} : ${element.score}`;
     userBoard.appendChild(span);
   });
+}
+
+export function handleUserWin({ winner, userSockets }) {
+  appendMessage(`Winner is : ${winner.nickname}`, "Bot");
+  handleUserUpdate(userSockets);
 }

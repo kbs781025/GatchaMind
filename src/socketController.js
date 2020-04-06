@@ -4,6 +4,10 @@ import { chooseWord } from "./words";
 let userSockets = [];
 let quizWord = null;
 
+// setInterval(function() {
+//   console.log(userSockets), 2000;
+// });
+
 function selectRandomPainter() {
   return userSockets[Math.floor(Math.random() * userSockets.length)];
 }
@@ -11,6 +15,10 @@ function selectRandomPainter() {
 export function controlSocket(io, socket) {
   function notifyUserUpdate() {
     io.emit(Events.userUpdate, userSockets);
+  }
+
+  function notifyWinner(winner) {
+    io.emit(Events.userWin, { winner, userSockets });
   }
 
   socket.on(Events.loggedIn, function(nickname) {
@@ -23,10 +31,16 @@ export function controlSocket(io, socket) {
     notifyUserUpdate(io);
     socket.broadcast.emit(Events.newUser, nickname);
 
+    function emitGameEnd() {
+      io.emit(Events.gameEnd, quizWord);
+    }
+
     if (userSockets.length >= 2) {
       const painter = selectRandomPainter();
       quizWord = chooseWord();
+      quizWord = "apple";
       io.emit(Events.gameStart, painter);
+      setTimeout(emitGameEnd, 50000);
     }
   });
 
@@ -36,6 +50,16 @@ export function controlSocket(io, socket) {
       message,
       nickname: socket.nickname
     });
+
+    if (message === quizWord) {
+      for (let user of userSockets) {
+        if (user.id === socket.id) {
+          user.score += 10;
+          notifyWinner(user);
+          break;
+        }
+      }
+    }
   });
 
   socket.on(Events.mouseMoving, function({ x, y }) {
