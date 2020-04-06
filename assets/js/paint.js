@@ -150,6 +150,17 @@ function enableColorButtons() {
   });
 }
 
+function handleGameCountdown() {
+  let count = 5;
+  const interval = setInterval(function() {
+    appendMessage(`Game will be started in ${count} second(s)`, "Bot");
+    --count;
+  }, 1000);
+  setTimeout(function() {
+    clearInterval(interval);
+  }, 5000);
+}
+
 export function handleStroking({ x, y }) {
   context.lineTo(x, y);
   context.stroke();
@@ -174,14 +185,16 @@ export function handleFillCanvas() {
 }
 
 export function handleGameStart(painter) {
-  if (painter.id !== getSocket().id) {
-    disableCanvas();
-    disableColorButtons();
-    enableChatting();
-  } else {
+  handleGameCountdown();
+
+  if (painter.id === getSocket().id) {
     enableCanvas();
     enableColorButtons();
     disableChatting();
+  } else {
+    disableCanvas();
+    disableColorButtons();
+    enableChatting();
   }
 }
 
