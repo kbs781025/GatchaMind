@@ -3,10 +3,12 @@ import { chooseWord } from "./words";
 
 let userSockets = [];
 let quizWord = null;
+let quizTimeout = null;
+let gameStarted = false;
 
 // setInterval(function() {
-//   console.log(userSockets), 2000;
-// });
+//   console.log(userSockets);
+// }, 5000);
 
 function selectRandomPainter() {
   return userSockets[Math.floor(Math.random() * userSockets.length)];
@@ -21,6 +23,26 @@ export function controlSocket(io, socket) {
     io.emit(Events.userWin, { winner, userSockets });
   }
 
+  function endGame(winner) {
+    if (winner) {
+      notifyWinner(winner);
+    } else {
+      io.emit(Events.gameEnd, quizWord);
+    }
+    startGame();
+  }
+
+  function startGame() {
+    gameStarted = true;
+    const painter = selectRandomPainter();
+    quizWord = chooseWord();
+
+    console.log(quizWord);
+
+    io.emit(Events.gameStart, painter);
+    quizTimeout = setTimeout(endGame, 10000);
+  }
+
   socket.on(Events.loggedIn, function(nickname) {
     socket.nickname = nickname;
     userSockets.push({
@@ -31,15 +53,8 @@ export function controlSocket(io, socket) {
     notifyUserUpdate(io);
     socket.broadcast.emit(Events.newUser, nickname);
 
-    function emitGameEnd() {
-      io.emit(Events.gameEnd, quizWord);
-    }
-
-    if (userSockets.length >= 2) {
-      const painter = selectRandomPainter();
-      quizWord = chooseWord();
-      io.emit(Events.gameStart, painter);
-      setTimeout(emitGameEnd, 50000);
+    if (userSockets.length >= 2 && !gameStarted) {
+      startGame();
     }
   });
 
@@ -54,7 +69,8 @@ export function controlSocket(io, socket) {
       for (let user of userSockets) {
         if (user.id === socket.id) {
           user.score += 10;
-          notifyWinner(user);
+          clearTimeout(quizTimeout);
+          endGame(user);
           break;
         }
       }
@@ -79,12 +95,6 @@ export function controlSocket(io, socket) {
 
   socket.on(Events.fillCanvas, function() {
     socket.broadcast.emit(Events.fillCanvas);
-  });
-
-  socket.on(Events.gameStart, function() {
-    const painter = selectRandomPainter();
-    const word = chooseWord;
-    io.emit(Events.gameStart, { painter, word });
   });
 
   socket.on("disconnect", function() {
